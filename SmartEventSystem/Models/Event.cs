@@ -15,6 +15,9 @@ namespace SmartEventSystem.Models
         public decimal Price { get; set; }
 
         public string Description { get; set; }
+
+        public string Venue { get; set; }
+
     }
 }
 
