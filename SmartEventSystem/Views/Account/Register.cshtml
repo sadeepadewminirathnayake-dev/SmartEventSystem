@@ -1,0 +1,57 @@
+﻿@model SmartEventSystem.Models.Member
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<h2>Member Registration</h2>
+
+<form asp-action="Register" method="post">
+
+    <div>
+        <label>Full Name</label>
+        <input asp-for="FullName" class="form-control" />
+        <span asp-validation-for="FullName" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label>Email</label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label>Password</label>
+        <input asp-for="Password" type="password" class="form-control" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label>Date of Birth</label>
+        <input asp-for="DOB" type="date" class="form-control" />
+        <span asp-validation-for="DOB" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label>Contact Number</label>
+        <input asp-for="ContactNB" class="form-control" />
+        <span asp-validation-for="ContactNB" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label>Preferences</label>
+        <input asp-for="Preferences" class="form-control" />
+    </div>
+
+    <br />
+
+    <button type="submit" class="btn btn-success">Register</button>
+
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+

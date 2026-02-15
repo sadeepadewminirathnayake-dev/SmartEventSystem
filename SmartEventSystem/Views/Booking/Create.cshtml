@@ -1,0 +1,28 @@
+﻿@model SmartEventSystem.Models.Booking
+
+<h2>Book Ticket</h2>
+
+<form asp-action="Create" method="post">
+
+    <input type="hidden" asp-for="EventID" />
+
+    <div>
+        <label>Seat Type</label>
+        <select asp-for="SeatType" class="form-control">
+            <option value="Regular">Regular (2500)</option>
+            <option value="VIP">VIP (5000)</option>
+        </select>
+    </div>
+
+    <div>
+        <label>Quantity</label>
+        <input asp-for="Quantity" type="number" class="form-control" />
+    </div>
+
+    <br />
+
+    <button type="submit" class="btn btn-success">Confirm Booking</button>
+
+</form>
+
+

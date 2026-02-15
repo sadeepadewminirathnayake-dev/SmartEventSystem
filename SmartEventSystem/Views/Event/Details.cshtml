@@ -1,0 +1,40 @@
+﻿@model SmartEventSystem.Models.Event
+
+<h2>Event Details</h2>
+
+<div>
+    <h3>@Model.EventName</h3>
+
+    <p><strong>Date:</strong> @Model.EventDate.ToShortDateString()</p>
+    <p><strong>Time:</strong> @Model.EventTime</p>
+    <p><strong>Price:</strong> @Model.Price</p>
+    <p><strong>Description:</strong> @Model.Description</p>
+
+    <br />
+
+    <a asp-action="Browse" class="btn btn-secondary">Back to Browse</a>
+</div>
+
+
+<a asp-controller="Booking"
+   asp-action="Create"
+   asp-route-eventId="@Model.EventID"
+   class="btn btn-success">
+    Book Ticket
+</a>
+
+
+<a asp-controller="Review"
+   asp-action="Create"
+   asp-route-eventId="@Model.EventID"
+   class="btn btn-primary">
+    Write Review
+</a>
+
+
+<a asp-controller="Review"
+   asp-action="Browse"
+   asp-route-eventId="@Model.EventID"
+   class="btn btn-info">
+    View Reviews
+</a>

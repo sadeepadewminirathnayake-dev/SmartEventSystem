@@ -1,0 +1,37 @@
+﻿@model List<SmartEventSystem.Models.Event>
+
+<h2>Browse Events</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Event Name</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Price</th>
+            <th>Description</th>
+            <th>Action</th>   <!-- ADD THIS -->
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.EventName</td>
+                <td>@item.EventDate.ToShortDateString()</td>
+                <td>@item.EventTime</td>
+                <td>@item.Price</td>
+                <td>@item.Description</td>
+                <td>
+                    <a asp-action="Details"
+                       asp-route-id="@item.EventID"
+                       class="btn btn-primary">
+                        Browse
+                    </a>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+

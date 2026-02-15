@@ -1,0 +1,39 @@
+﻿@model List<SmartEventSystem.Models.Event>
+
+<h2>Search Results</h2>
+
+@if (Model == null || Model.Count == 0)
+{
+    <p>No events found.</p>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Event Name</th>
+                <th>Date</th>
+                <th>Price</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.EventName</td>
+                    <td>@item.EventDate.ToShortDateString()</td>
+                    <td>@item.Price</td>
+                    <td>
+                        <a asp-controller="Event"
+                           asp-action="Details"
+                           asp-route-id="@item.EventID"
+                           class="btn btn-info">
+                            View
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
