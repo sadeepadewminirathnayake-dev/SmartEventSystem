@@ -77,7 +77,8 @@ namespace SmartEventSystem.Controllers
 
                 ticketCmd.ExecuteNonQuery();
             }
-            ViewBag.Message = "Event booked successfully!";
+
+            TempData["BookingSuccess"] = "Event booked successfully!";
             return View();
         }
     }
