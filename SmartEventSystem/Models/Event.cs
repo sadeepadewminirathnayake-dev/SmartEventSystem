@@ -16,7 +16,6 @@ namespace SmartEventSystem.Models
 
         public string Description { get; set; }
 
-        public string Venue { get; set; }
 
     }
 }
