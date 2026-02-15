@@ -1,5 +1,10 @@
 ﻿@model SmartEventSystem.Models.Member
-
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
 <h2>Login</h2>
 
 <form asp-action="Login" method="post">
