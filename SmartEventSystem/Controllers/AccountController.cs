@@ -53,6 +53,7 @@ namespace SmartEventSystem.Controllers
                     cmd.ExecuteNonQuery();
                 }
 
+                TempData["SuccessMessage"] = "Registration completed successfully!";
                 return RedirectToAction("Login");
             }
 
