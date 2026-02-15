@@ -25,6 +25,13 @@ else
                     <td>@review.ReviewDate.ToShortDateString()</td>
                 </tr>
             }
+
+            <a asp-controller="Inquiry"
+               asp-action="Create"
+               asp-route-eventId="@ViewBag.EventID"
+               class="btn btn-warning">
+                Send Inquiry
+            </a>
         </tbody>
     </table>
 }
