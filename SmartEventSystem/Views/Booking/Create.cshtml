@@ -1,5 +1,12 @@
 ﻿@model SmartEventSystem.Models.Booking
 
+@if (TempData["BookingSuccess"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["BookingSuccess"]
+    </div>
+}
+
 <h2>Book Ticket</h2>
 
 <form asp-action="Create" method="post">
