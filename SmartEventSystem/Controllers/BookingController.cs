@@ -78,6 +78,7 @@ namespace SmartEventSystem.Controllers
                 ticketCmd.ExecuteNonQuery();
             }
 
+            TempData["BookingSuccess"] = "Event booked successfully!";
             return RedirectToAction("Browse", "Event");
         }
     }
