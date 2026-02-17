@@ -1,17 +1,98 @@
-﻿<h2>Welcome to Smart Event System</h2>
+﻿@model List<SmartEventSystem.Models.Event>
 
-<form asp-action="Search" method="post">
-    <div class="form-group">
-        <input type="text" name="searchTerm"
-               class="form-control"
-               placeholder="Search Event by Name" required />
+<!-- HERO SECTION -->
+<div class="bg-dark text-white text-center p-5 mb-5">
+    <h1 class="display-4">Welcome to Smart Event Management System</h1>
+    <p class="lead">Discover cultural events, book tickets, and experience creativity.</p>
+    
+</div>
+
+<!-- ABOUT SECTION -->
+<div class="container mt-5">
+    <div class="row align-items-center">
+        <div class="col-md-6">
+            <h2>About the Cultural Council</h2>
+            <p>
+                The Metropolitan Cultural Council promotes arts, heritage,
+                and community engagement through concerts, exhibitions,
+                festivals, and workshops. It connects communities by
+                supporting cultural diversity and creativity.
+            </p>
+         
+        </div>
+
+        <div class="col-md-6 text-center">
+            <img src="https://images.unsplash.com/photo-1506157786151-b8491531f063"
+                 class="img-fluid rounded shadow"
+                 alt="Cultural Event">
+        </div>
     </div>
+</div>
 
-    <br />
+<!-- UPCOMING EVENTS SECTION -->
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Upcoming Events</h2>
 
-    <button type="submit" class="btn btn-primary">
-        Search Event
-    </button>
+    <div class="row">
 
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">@item.EventName</h5>
+                            <p><strong>Date:</strong> @item.EventDate.ToShortDateString()</p>
+                            <p><strong>Venue:</strong> @item.VenueID</p>
 
-</form>
+                            <a asp-controller="Event"
+                               asp-action="Details"
+                               asp-route-id="@item.EventID"
+                               class="btn btn-primary btn-sm">
+                                View Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12 text-center">
+                <p class="text-muted">No upcoming events available.</p>
+            </div>
+        }
+
+    </div>
+</div>
+
+<!-- SEARCH SECTION -->
+<div class="container mt-5 mb-5">
+    <h3 class="text-center mb-3">Search Events</h3>
+
+    <form asp-action="Search" method="post" class="row justify-content-center">
+        <div class="col-md-6">
+            <input type="text"
+                   name="searchTerm"
+                   class="form-control"
+                   placeholder="Search Event by Name"
+                   required />
+        </div>
+
+        <div class="col-md-2 text-center mt-2 mt-md-0">
+            <button type="submit" class="btn btn-primary w-100">
+                Search
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- SIMPLE HOVER EFFECT -->
+<style>
+    .card:hover {
+        transform: scale(1.03);
+        transition: 0.3s;
+    }
+</style>
+
