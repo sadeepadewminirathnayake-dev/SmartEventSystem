@@ -8,44 +8,69 @@
 
 <form asp-action="Register" method="post">
 
-    <div>
-        <label>Full Name</label>
-        <input asp-for="FullName" class="form-control" />
-        <span asp-validation-for="FullName" class="text-danger"></span>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                <div class="card shadow-lg border-0 rounded-4">
+                    <div class="card-header bg-dark text-white text-center py-4 rounded-top-4">
+                        <h3 class="fw-bold mb-0">Member Registration</h3>
+                        <small class="text-white-50">Create your account to get started</small>
+                    </div>
+                    <div class="card-body p-4 p-md-5">
+                        <form asp-action="Register" method="post">
+
+                            <div class="mb-3">
+                                <label asp-for="FullName" class="form-label fw-semibold small"></label>
+                                <input asp-for="FullName" class="form-control form-control-lg custom-input" placeholder="e.g. John Doe" />
+                                <span asp-validation-for="FullName" class="text-danger small"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="Email" class="form-label fw-semibold small"></label>
+                                <input asp-for="Email" class="form-control form-control-lg custom-input" placeholder="name@example.com" />
+                                <span asp-validation-for="Email" class="text-danger small"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="Password" class="form-label fw-semibold small"></label>
+                                <input asp-for="Password" type="password" class="form-control form-control-lg custom-input" placeholder="Min. 8 characters" />
+                                <span asp-validation-for="Password" class="text-danger small"></span>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="DOB" class="form-label fw-semibold small">Date of Birth</label>
+                                    <input asp-for="DOB" type="date" class="form-control custom-input" />
+                                    <span asp-validation-for="DOB" class="text-danger small"></span>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="ContactNB" class="form-label fw-semibold small">Contact Number</label>
+                                    <input asp-for="ContactNB" class="form-control custom-input" placeholder="07x xxxxxxx" />
+                                    <span asp-validation-for="ContactNB" class="text-danger small"></span>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label asp-for="Preferences" class="form-label fw-semibold small"></label>
+                                <textarea asp-for="Preferences" class="form-control custom-input" rows="2" placeholder="Tell us what you like..."></textarea>
+                            </div>
+
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-success btn-lg fw-bold shadow-sm py-3 mt-2">
+                                    Register Now
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-footer bg-light text-center py-3 rounded-bottom-4">
+                        <p class="mb-0 small text-muted">Already have an account? <a href="/Account/Login" class="text-decoration-none fw-bold text-dark">Login here</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div>
-        <label>Email</label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
-
-    <div>
-        <label>Password</label>
-        <input asp-for="Password" type="password" class="form-control" />
-        <span asp-validation-for="Password" class="text-danger"></span>
-    </div>
-
-    <div>
-        <label>Date of Birth</label>
-        <input asp-for="DOB" type="date" class="form-control" />
-        <span asp-validation-for="DOB" class="text-danger"></span>
-    </div>
-
-    <div>
-        <label>Contact Number</label>
-        <input asp-for="ContactNB" class="form-control" />
-        <span asp-validation-for="ContactNB" class="text-danger"></span>
-    </div>
-
-    <div>
-        <label>Preferences</label>
-        <input asp-for="Preferences" class="form-control" />
-    </div>
-
-    <br />
-
-    <button type="submit" class="btn btn-success">Register</button>
+    
 
 </form>
 
