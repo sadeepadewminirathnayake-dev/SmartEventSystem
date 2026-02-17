@@ -28,6 +28,13 @@
                        class="btn btn-primary">
                         Browse
                     </a>
+                    <a asp-controller="Venue"
+                       asp-action="Details"
+                       asp-route-id="@item.VenueID"
+                       class="btn btn-info btn-sm">
+                        View Venue
+                    </a>
+
                 </td>
             </tr>
         }

@@ -13,8 +13,7 @@ namespace SmartEventSystem.Controllers
             _configuration = configuration;
         }
 
-        // VIEW VENUE DETAILS
-        public IActionResult Details(string venueName)
+        public IActionResult Details(int id)
         {
             Venue venue = null;
 
@@ -23,12 +22,12 @@ namespace SmartEventSystem.Controllers
 
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string query = @"SELECT VenueName, Address, City, Capacity, Description
+                string query = @"SELECT VenueID, VenueName, Address, Capacity
                                  FROM Venue
-                                 WHERE VenueName = @VenueName";
+                                 WHERE VenueID = @VenueID";
 
                 SqlCommand cmd = new SqlCommand(query, con);
-                cmd.Parameters.AddWithValue("@VenueName", venueName);
+                cmd.Parameters.AddWithValue("@VenueID", id);
 
                 con.Open();
                 SqlDataReader reader = cmd.ExecuteReader();
@@ -37,22 +36,18 @@ namespace SmartEventSystem.Controllers
                 {
                     venue = new Venue
                     {
+                        VenueID = (int)reader["VenueID"],
                         VenueName = reader["VenueName"].ToString(),
                         Address = reader["Address"].ToString(),
-                        City = reader["City"].ToString(),
-                        Capacity = (int)reader["Capacity"],
-                        Description = reader["Description"].ToString()
+                        Capacity = (int)reader["Capacity"]
                     };
                 }
             }
 
             if (venue == null)
-            {
                 return NotFound();
-            }
 
             return View(venue);
         }
     }
 }
-

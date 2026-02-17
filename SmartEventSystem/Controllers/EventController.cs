@@ -21,7 +21,7 @@ namespace SmartEventSystem.Controllers
 
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string query = "SELECT EventID, EventName, EventDate, EventTime, Price, Description FROM Event";
+                string query = "SELECT EventID, EventName, EventDate, EventTime, Price, Description, VenueID FROM Event";
 
                 SqlCommand cmd = new SqlCommand(query, con);
                 con.Open();
@@ -37,8 +37,14 @@ namespace SmartEventSystem.Controllers
                         EventDate = (DateTime)reader["EventDate"],
                         EventTime = (TimeSpan)reader["EventTime"],
                         Price = (decimal)reader["Price"],
-                        Description = reader["Description"].ToString()
+                        Description = reader["Description"].ToString(),
+                        VenueID = (int)reader["VenueID"]
+
+
+
                     });
+
+
                 }
             }
 
@@ -71,7 +77,9 @@ namespace SmartEventSystem.Controllers
                         EventDate = (DateTime)reader["EventDate"],
                         EventTime = (TimeSpan)reader["EventTime"],
                         Price = (decimal)reader["Price"],
-                        Description = reader["Description"].ToString()
+                        Description = reader["Description"].ToString(),
+                        
+
                     };
                 }
             }
