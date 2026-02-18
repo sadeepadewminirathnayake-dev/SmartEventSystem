@@ -13,10 +13,18 @@ namespace SmartEventSystem.Controllers
             _configuration = configuration;
         }
 
-        // ✅ GET: Booking/Create
+        // 🔒 GET: Booking/Create
         [HttpGet]
         public IActionResult Create(int eventId)
         {
+            // Check login
+            if (HttpContext.Session.GetString("UserEmail") == null)
+            {
+                // Save event ID for redirect after login
+                HttpContext.Session.SetInt32("PendingBookingEventId", eventId);
+                return RedirectToAction("Login", "Account");
+            }
+
             Booking booking = new Booking
             {
                 EventID = eventId
@@ -25,7 +33,7 @@ namespace SmartEventSystem.Controllers
             return View(booking);
         }
 
-        // ✅ POST: Booking/Create
+        // 🔒 POST: Booking/Create
         [HttpPost]
         public IActionResult Create(Booking model)
         {
@@ -34,24 +42,55 @@ namespace SmartEventSystem.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            string connectionString = _configuration.GetConnectionString("SmartEventDBConnection");
+            if (model.Quantity <= 0)
+            {
+                ModelState.AddModelError("", "Quantity must be greater than 0.");
+                return View(model);
+            }
+
+            string connectionString =
+                _configuration.GetConnectionString("SmartEventDBConnection");
 
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 con.Open();
 
-                // Get MemberID using Email
-                string getMemberQuery = "SELECT MemberID FROM Member WHERE Email=@Email";
-                SqlCommand memberCmd = new SqlCommand(getMemberQuery, con);
-                memberCmd.Parameters.AddWithValue("@Email", HttpContext.Session.GetString("UserEmail"));
+                // Get MemberID
+                string getMemberQuery =
+                    "SELECT MemberID FROM Member WHERE Email=@Email";
 
-                int memberId = (int)memberCmd.ExecuteScalar();
+                SqlCommand memberCmd =
+                    new SqlCommand(getMemberQuery, con);
 
-                decimal ticketPrice = model.SeatType == "VIP" ? 5000 : 2500;
+                memberCmd.Parameters.AddWithValue(
+                    "@Email",
+                    HttpContext.Session.GetString("UserEmail"));
+
+                object result = memberCmd.ExecuteScalar();
+
+                if (result == null)
+                {
+                    return RedirectToAction("Login", "Account");
+                }
+
+                int memberId = (int)result;
+
+                // Seat pricing logic
+                decimal ticketPrice = model.SeatType switch
+                {
+                    "Regular" => 2500,
+                    "Balcony" => 3000,
+                    "Premium" => 3500,
+                    "VIP" => 5000,
+                    "Front Row" => 6000,
+                    "VVIP" => 8000,
+                    _ => 2500
+                };
+
                 decimal totalAmount = ticketPrice * model.Quantity;
 
-                // Insert into Booking table
-                string bookingQuery = @"INSERT INTO Booking 
+                // Insert Booking
+                string bookingQuery = @"INSERT INTO Booking
                                         (MemberID, EventID, BookingDate, TotalAmount)
                                         OUTPUT INSERTED.BookingID
                                         VALUES (@MemberID, @EventID, @BookingDate, @TotalAmount)";
@@ -64,8 +103,8 @@ namespace SmartEventSystem.Controllers
 
                 int bookingId = (int)bookingCmd.ExecuteScalar();
 
-                // Insert into Ticket table
-                string ticketQuery = @"INSERT INTO Ticket 
+                // Insert Ticket
+                string ticketQuery = @"INSERT INTO Ticket
                                        (BookingID, SeatType, Quantity, Price)
                                        VALUES (@BookingID, @SeatType, @Quantity, @Price)";
 
@@ -79,7 +118,7 @@ namespace SmartEventSystem.Controllers
             }
 
             TempData["BookingSuccess"] = "Event booked successfully!";
-            return View();
+            return RedirectToAction("Create", new { eventId = model.EventID });
         }
     }
 }

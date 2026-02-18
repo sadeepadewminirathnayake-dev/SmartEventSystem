@@ -14,6 +14,7 @@
                     <div class="card shadow-lg border-0 h-100 event-card">
 
                         <div class="card-body">
+
                             <h5 class="card-title text-primary fw-bold">
                                 @item.EventName
                             </h5>
@@ -33,24 +34,65 @@
                                 Rs. @item.Price
                             </p>
 
-                            <p class="text-muted">
+                            <!-- 🔹 Availability Badge -->
+                            <p class="mt-2">
+                                <strong>Status:</strong>
+                                <span class="badge @(item.AvailabilityStatus == "Available" ? "bg-success" : "bg-danger")">
+                                    @item.AvailabilityStatus
+                                </span>
+                            </p>
+
+                            <p class="text-muted small">
                                 @item.Description
                             </p>
+
                         </div>
 
-                        <div class="card-footer bg-white border-0 d-flex justify-content-between">
+                        <div class="card-footer bg-white border-0 d-flex justify-content-between flex-wrap">
+
                             <a asp-action="Details"
                                asp-route-id="@item.EventID"
-                               class="btn btn-primary btn-sm">
+                               class="btn btn-primary btn-sm mb-1">
                                 Browse
                             </a>
 
                             <a asp-controller="Venue"
                                asp-action="Details"
                                asp-route-id="@item.VenueID"
-                               class="btn btn-outline-info btn-sm">
+                               class="btn btn-outline-info btn-sm mb-1">
                                 View Venue
                             </a>
+
+                            <!-- 🔒 Booking Restriction Logic -->
+                            @if (Context.Session.GetString("UserEmail") == null)
+                            {
+                                <!-- Guest -->
+                                <a asp-controller="Account"
+                                   asp-action="Login"
+                                   class="btn btn-warning btn-sm mb-1">
+                                    Login to Book
+                                </a>
+                            }
+                            else
+                            {
+                                <!-- Member -->
+                                if (item.AvailabilityStatus == "Available")
+                                {
+                                    <a asp-controller="Booking"
+                                       asp-action="Create"
+                                       asp-route-eventId="@item.EventID"
+                                       class="btn btn-success btn-sm mb-1">
+                                        Book Ticket
+                                    </a>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-danger btn-sm mb-1" disabled>
+                                        Fully Booked
+                                    </button>
+                                }
+                            }
+
                         </div>
 
                     </div>
@@ -74,8 +116,14 @@
         border-radius: 15px;
     }
 
-    .event-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        .event-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+    .badge {
+        font-size: 0.85rem;
+        padding: 6px 10px;
+        border-radius: 20px;
     }
 </style>

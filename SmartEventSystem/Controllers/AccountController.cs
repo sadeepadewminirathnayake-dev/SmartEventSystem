@@ -123,6 +123,7 @@ namespace SmartEventSystem.Controllers
                 {
                     ViewBag.Message = "Invalid Email or Password";
                 }
+
             }
 
             return View();
