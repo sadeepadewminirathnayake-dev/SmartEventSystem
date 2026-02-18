@@ -1,39 +1,83 @@
 ﻿@model SmartEventSystem.Models.Booking
 
-@if (TempData["BookingSuccess"] != null)
-{
-    <div class="alert alert-success">
-        @TempData["BookingSuccess"]
+<div class="container mt-5">
+
+    <div class="card shadow-lg border-0 rounded-4 booking-card">
+
+        <div class="card-body p-5">
+
+            <h2 class="text-center text-success fw-bold mb-4">
+                🎟 Book Your Ticket
+            </h2>
+
+            @if (TempData["BookingSuccess"] != null)
+            {
+                <div class="alert alert-success text-center">
+                    @TempData["BookingSuccess"]
+                </div>
+            }
+
+            <form asp-action="Create" method="post">
+
+                <input type="hidden" asp-for="EventID" />
+
+                <!-- Seat Type -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Select Seat Type</label>
+                    <select asp-for="SeatType" class="form-select">
+                        <option value="Regular">Regular (Rs. 2500)</option>
+                        <option value="Balcony">Balcony (Rs. 3000)</option>
+                        <option value="Premium">Premium (Rs. 3500)</option>
+                        <option value="VIP">VIP (Rs. 5000)</option>
+                        <option value="Front Row">Front Row (Rs. 6000)</option>
+                        <option value="VVIP">VVIP (Rs. 8000)</option>
+                    </select>
+                </div>
+
+                <!-- Quantity -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Quantity</label>
+                    <input asp-for="Quantity"
+                           type="number"
+                           min="1"
+                           class="form-control"
+                           placeholder="Enter number of tickets" />
+                </div>
+
+                <!-- Button -->
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-success btn-lg">
+                        Confirm Booking
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+
     </div>
-}
 
-<h2>Book Ticket</h2>
+</div>
 
-<form asp-action="Create" method="post">
+<style>
+    .booking-card {
+        max-width: 600px;
+        margin: auto;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
 
-    <input type="hidden" asp-for="EventID" />
+        .booking-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
 
-    <div>
-        <label>Seat Type</label>
-        <select asp-for="SeatType" class="form-control">
-            <option value="Regular">Regular (2500)</option>
-            <option value="Balcony">Balcony (3000)</option>
-            <option value="Premium">Premium (3500)</option>
-            <option value="VIP">VIP (5000)</option>
-            <option value="Front Row">Front Row (6000)</option>
-            <option value="VVIP">VVIP (8000)</option>
-        </select>
-    </div>
+    .btn-success {
+        border-radius: 10px;
+    }
 
-    <div>
-        <label>Quantity</label>
-        <input asp-for="Quantity" type="number" class="form-control" />
-    </div>
-
-    <br />
-
-    <button type="submit" class="btn btn-success">Confirm Booking</button>
-
-</form>
+    .form-control, .form-select {
+        border-radius: 8px;
+    }
+</style>
 
 
