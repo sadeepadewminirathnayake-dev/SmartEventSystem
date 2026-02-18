@@ -1,44 +1,81 @@
 ﻿@model List<SmartEventSystem.Models.Event>
 
-<h2>Browse Events</h2>
+<div class="container mt-5">
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Event Name</th>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Price</th>
-            <th>Description</th>
-            <th>Action</th>   <!-- ADD THIS -->
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.EventName</td>
-                <td>@item.EventDate.ToShortDateString()</td>
-                <td>@item.EventTime</td>
-                <td>@item.Price</td>
-                <td>@item.Description</td>
-                <td>
-                    <a asp-action="Details"
-                       asp-route-id="@item.EventID"
-                       class="btn btn-primary">
-                        Browse
-                    </a>
-                    <a asp-controller="Venue"
-                       asp-action="Details"
-                       asp-route-id="@item.VenueID"
-                       class="btn btn-info btn-sm">
-                        View Venue
-                    </a>
+    <h2 class="text-center mb-4 fw-bold">Browse Events</h2>
 
-                </td>
-            </tr>
-        }
+    @if (Model != null && Model.Any())
+    {
+        <div class="row">
 
-    </tbody>
-</table>
+            @foreach (var item in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-lg border-0 h-100 event-card">
 
+                        <div class="card-body">
+                            <h5 class="card-title text-primary fw-bold">
+                                @item.EventName
+                            </h5>
+
+                            <p class="mb-1">
+                                <strong>Date:</strong>
+                                @item.EventDate.ToShortDateString()
+                            </p>
+
+                            <p class="mb-1">
+                                <strong>Time:</strong>
+                                @item.EventTime
+                            </p>
+
+                            <p class="mb-1">
+                                <strong>Price:</strong>
+                                Rs. @item.Price
+                            </p>
+
+                            <p class="text-muted">
+                                @item.Description
+                            </p>
+                        </div>
+
+                        <div class="card-footer bg-white border-0 d-flex justify-content-between">
+                            <a asp-action="Details"
+                               asp-route-id="@item.EventID"
+                               class="btn btn-primary btn-sm">
+                                Browse
+                            </a>
+
+                            <a asp-controller="Venue"
+                               asp-action="Details"
+                               asp-route-id="@item.VenueID"
+                               class="btn btn-outline-info btn-sm">
+                                View Venue
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            }
+
+        </div>
+    }
+    else
+    {
+        <div class="text-center">
+            <p class="text-muted">No events available at the moment.</p>
+        </div>
+    }
+
+</div>
+
+<style>
+    .event-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 15px;
+    }
+
+    .event-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    }
+</style>
