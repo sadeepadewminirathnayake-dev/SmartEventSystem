@@ -1,30 +1,70 @@
 ﻿@model SmartEventSystem.Models.Review
 
-<h2>Submit Review</h2>
+<div class="container mt-5">
 
-<form asp-action="Create" method="post">
-    <input type="hidden" asp-for="EventID" />
+    <div class="card shadow-lg border-0 rounded-4 review-card">
+        <div class="card-body p-5">
 
-    <div class="form-group">
-        <label>Rating (1 - 5)</label>
-        <select asp-for="Rating" class="form-control">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-        </select>
+            <h2 class="text-center text-primary fw-bold mb-4">
+                ✍ Submit Your Review
+            </h2>
+
+            <form asp-action="Create" method="post">
+
+                <input type="hidden" asp-for="EventID" />
+
+                <!-- Rating -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Rating</label>
+                    <select asp-for="Rating" class="form-select">
+                        <option value="1">⭐ 1 - Poor</option>
+                        <option value="2">⭐⭐ 2 - Fair</option>
+                        <option value="3">⭐⭐⭐ 3 - Good</option>
+                        <option value="4">⭐⭐⭐⭐ 4 - Very Good</option>
+                        <option value="5">⭐⭐⭐⭐⭐ 5 - Excellent</option>
+                    </select>
+                </div>
+
+                <!-- Comment -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Comment</label>
+                    <textarea asp-for="Comment"
+                              class="form-control"
+                              rows="4"
+                              placeholder="Share your experience..."></textarea>
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-success btn-lg">
+                        Submit Review
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
     </div>
 
-    <div class="form-group">
-        <label>Comment</label>
-        <textarea asp-for="Comment" class="form-control"></textarea>
-    </div>
+</div>
 
-    <br />
+<style>
+    .review-card {
+        max-width: 650px;
+        margin: auto;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
 
-    <button type="submit" class="btn btn-success">
-        Submit Review
-    </button>
-</form>
+        .review-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+    .form-control, .form-select {
+        border-radius: 10px;
+    }
+
+    .btn-success {
+        border-radius: 10px;
+    }
+</style>
 
