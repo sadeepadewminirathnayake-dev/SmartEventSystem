@@ -1,22 +1,92 @@
 ﻿@model SmartEventSystem.Models.Venue
 
-<div class="container mt-4">
-    <div class="card shadow">
-        <div class="card-header bg-info text-white">
-            <h3>@Model.VenueName</h3>
+<div class="container mt-5">
+
+    <div class="card shadow-lg border-0 rounded-4 venue-card">
+
+        <!-- HEADER -->
+        <div class="card-header bg-info text-white text-center rounded-top-4 p-4">
+            <h2 class="fw-bold mb-0">
+                📍 @Model.VenueName
+            </h2>
         </div>
 
-        <div class="card-body">
-            <p><strong>Address:</strong> @Model.Address</p>
-            <p><strong>Capacity:</strong> @Model.Capacity people</p>
+        <div class="card-body p-5">
 
-            <a asp-controller="Event"
-               asp-action="Index"
-               class="btn btn-secondary">
-                Back to Events
-            </a>
+            <div class="row">
+
+                <!-- LEFT SIDE - DETAILS -->
+                <div class="col-md-6">
+
+                    <h5 class="fw-bold text-secondary">Venue Information</h5>
+                    <hr />
+
+                    <p class="mb-3">
+                        <strong>Address:</strong><br />
+                        @Model.Address
+                    </p>
+
+                    <p class="mb-3">
+                        <strong>Capacity:</strong>
+                        <span class="badge bg-success fs-6">
+                            @Model.Capacity People
+                        </span>
+                    </p>
+
+                    <div class="mt-4">
+                        <a asp-controller="Event"
+                           asp-action="Index"
+                           class="btn btn-secondary btn-lg">
+                            ⬅ Back to Events
+                        </a>
+                    </div>
+
+                </div>
+
+                <!-- RIGHT SIDE - MAP -->
+                <div class="col-md-6">
+
+                    <h5 class="fw-bold text-secondary">Location Map</h5>
+                    <hr />
+
+                    <div class="map-container">
+                        <iframe width="100%"
+                                height="300"
+                                style="border:0; border-radius:15px;"
+                                loading="lazy"
+                                allowfullscreen
+                                src="https://www.google.com/maps?q=@Model.Address&output=embed">
+                        </iframe>
+                    </div>
+
+                </div>
+
+            </div>
+
         </div>
+
     </div>
+
 </div>
+
+<style>
+    .venue-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .venue-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 35px rgba(0,0,0,0.2);
+        }
+
+    .rounded-top-4 {
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+    }
+
+    .map-container iframe {
+        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+</style>
 
 
