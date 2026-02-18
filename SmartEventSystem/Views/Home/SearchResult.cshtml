@@ -2,15 +2,14 @@
 
 <div class="container mt-5">
 
-    <h2 class="text-center fw-bold text-primary mb-4">
+    <h2 class="text-center text-primary fw-bold mb-4">
         Search Results
     </h2>
 
     @if (Model == null || !Model.Any())
     {
-        <div class="alert alert-warning text-center shadow-sm">
-            <h5>No events found.</h5>
-            <p class="mb-0">Try searching with a different event name.</p>
+        <div class="alert alert-warning text-center">
+            No events found.
         </div>
     }
     else
@@ -19,43 +18,62 @@
 
             @foreach (var item in Model)
             {
-                <div class="col-md-4 mb-4">
-                    <div class="card shadow border-0 rounded-4 h-100 search-card">
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow border-0 rounded-4 h-100">
 
                         <div class="card-body">
 
-                            <h5 class="card-title text-dark fw-bold">
+                            <h5 class="fw-bold text-dark">
                                 @item.EventName
                             </h5>
 
-                            <p class="mb-2">
+                            <p>
                                 <strong>Date:</strong>
                                 @item.EventDate.ToShortDateString()
                             </p>
 
-                            <p class="mb-3">
+                            <p>
                                 <strong>Price:</strong>
-                                <span class="badge bg-success fs-6">
+                                <span class="badge bg-success">
                                     Rs. @item.Price
                                 </span>
                             </p>
 
-                            <div class="d-grid">
-                                <a asp-controller="Event"
-                                   asp-action="Details"
-                                   asp-route-id="@item.EventID"
-                                   class="btn btn-primary">
-                                    View Details
-                                </a>
+                            <!-- 🔹 Availability Badge -->
+                            <p class="mt-2">
+                                <strong>Status:</strong>
+                                <span class="badge @(item.AvailabilityStatus == "Available" ? "bg-success" : "bg-danger")">
+                                    @item.AvailabilityStatus
+                                </span>
+                            </p>
 
+                        </div>
 
-                                <a asp-controller="Venue"
-                                   asp-action="Details"
-                                   asp-route-id="@item.VenueID"
-                                   class="btn btn-outline-info btn-sm">
-                                    View Venue
+                        <div class="card-footer bg-white border-0">
+
+                            <a asp-controller="Event"
+                               asp-action="Details"
+                               asp-route-id="@item.EventID"
+                               class="btn btn-primary w-100 mb-2">
+                                View Details
+                            </a>
+
+                            <a asp-controller="Venue"
+                               asp-action="Details"
+                               asp-route-id="@item.VenueID"
+                               class="btn btn-outline-info w-100 mb-2">
+                                View Venue
+                            </a>
+
+                            <!-- 🔒 Guest Restriction -->
+                            @if (Context.Session.GetString("UserEmail") == null)
+                            {
+                                <a asp-controller="Account"
+                                   asp-action="Login"
+                                   class="btn btn-warning w-100">
+                                    Login to Book
                                 </a>
-                            </div>
+                            }
 
                         </div>
 
@@ -68,13 +86,3 @@
 
 </div>
 
-<style>
-    .search-card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-        .search-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 12px 25px rgba(0,0,0,0.15);
-        }
-</style>

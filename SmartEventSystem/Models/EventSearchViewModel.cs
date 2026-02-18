@@ -39,5 +39,7 @@ namespace SmartEventSystem.ViewModels
         public decimal Price { get; set; }
         public string Description { get; set; }     // short version maybe
         public bool IsAvailable { get; set; }       // you can compute this later
+        public string AvailabilityStatus { get; set; }
+
     }
 }

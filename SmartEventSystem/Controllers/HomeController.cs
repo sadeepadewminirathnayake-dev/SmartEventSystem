@@ -16,7 +16,9 @@ namespace SmartEventSystem.Controllers
             _configuration = configuration;
         }
 
+        // ===============================
         // ✅ HOME PAGE WITH UPCOMING EVENTS
+        // ===============================
         public IActionResult Index()
         {
             List<Event> events = new List<Event>();
@@ -26,19 +28,44 @@ namespace SmartEventSystem.Controllers
 
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string query = @"SELECT TOP 6 EventID, EventName, EventDate, EventTime,
-                                        Price, Description, VenueID
-                                 FROM Event
-                                 WHERE EventDate >= GETDATE()
-                                 ORDER BY EventDate ASC";
+                string query = @"
+                SELECT TOP 6 
+                    E.EventID,
+                    E.EventName,
+                    E.EventDate,
+                    E.EventTime,
+                    E.Price,
+                    E.Description,
+                    E.VenueID,
+                    V.Capacity,
+                    ISNULL(SUM(T.Quantity),0) AS BookedSeats
+                FROM Event E
+                LEFT JOIN Venue V ON E.VenueID = V.VenueID
+                LEFT JOIN Booking B ON E.EventID = B.EventID
+                LEFT JOIN Ticket T ON B.BookingID = T.BookingID
+                WHERE E.EventDate >= GETDATE()
+                GROUP BY 
+                    E.EventID,
+                    E.EventName,
+                    E.EventDate,
+                    E.EventTime,
+                    E.Price,
+                    E.Description,
+                    E.VenueID,
+                    V.Capacity
+                ORDER BY E.EventDate ASC";
 
                 SqlCommand cmd = new SqlCommand(query, con);
-
                 con.Open();
                 SqlDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
                 {
+                    int capacity = reader["Capacity"] == DBNull.Value ? 0 : Convert.ToInt32(reader["Capacity"]);
+                    int bookedSeats = reader["BookedSeats"] == DBNull.Value ? 0 : Convert.ToInt32(reader["BookedSeats"]);
+
+                    string status = (capacity > 0 && capacity - bookedSeats > 0) ? "Available" : "Full";
+
                     events.Add(new Event
                     {
                         EventID = (int)reader["EventID"],
@@ -47,29 +74,21 @@ namespace SmartEventSystem.Controllers
                         EventTime = (TimeSpan)reader["EventTime"],
                         Price = (decimal)reader["Price"],
                         Description = reader["Description"].ToString(),
-                        VenueID = (int)reader["VenueID"]
+                        VenueID = (int)reader["VenueID"],
+                        AvailabilityStatus = status
                     });
                 }
             }
 
-            return View(events); // ✅ IMPORTANT
+            return View(events);
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        // ✅ Restrict search for guests
+        // ===============================
+        // ✅ Allow guests to search
+        // ===============================
         [HttpPost]
         public IActionResult Search(string searchTerm)
         {
-            if (HttpContext.Session.GetString("UserEmail") == null)
-            {
-                HttpContext.Session.SetString("PendingSearch", searchTerm);
-                return RedirectToAction("Login", "Account");
-            }
-
             return PerformSearch(searchTerm);
         }
 
@@ -82,10 +101,31 @@ namespace SmartEventSystem.Controllers
 
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string query = @"SELECT EventID, EventName, EventDate, EventTime,
-                                        Price, Description, VenueID
-                                 FROM Event
-                                 WHERE EventName LIKE @Search";
+                string query = @"
+                SELECT 
+                    E.EventID,
+                    E.EventName,
+                    E.EventDate,
+                    E.EventTime,
+                    E.Price,
+                    E.Description,
+                    E.VenueID,
+                    V.Capacity,
+                    ISNULL(SUM(T.Quantity),0) AS BookedSeats
+                FROM Event E
+                LEFT JOIN Venue V ON E.VenueID = V.VenueID
+                LEFT JOIN Booking B ON E.EventID = B.EventID
+                LEFT JOIN Ticket T ON B.BookingID = T.BookingID
+                WHERE E.EventName LIKE @Search
+                GROUP BY 
+                    E.EventID,
+                    E.EventName,
+                    E.EventDate,
+                    E.EventTime,
+                    E.Price,
+                    E.Description,
+                    E.VenueID,
+                    V.Capacity";
 
                 SqlCommand cmd = new SqlCommand(query, con);
                 cmd.Parameters.AddWithValue("@Search", "%" + searchTerm + "%");
@@ -95,6 +135,11 @@ namespace SmartEventSystem.Controllers
 
                 while (reader.Read())
                 {
+                    int capacity = reader["Capacity"] == DBNull.Value ? 0 : Convert.ToInt32(reader["Capacity"]);
+                    int bookedSeats = reader["BookedSeats"] == DBNull.Value ? 0 : Convert.ToInt32(reader["BookedSeats"]);
+
+                    string status = (capacity > 0 && capacity - bookedSeats > 0) ? "Available" : "Full";
+
                     events.Add(new Event
                     {
                         EventID = (int)reader["EventID"],
@@ -103,7 +148,8 @@ namespace SmartEventSystem.Controllers
                         EventTime = (TimeSpan)reader["EventTime"],
                         Price = (decimal)reader["Price"],
                         Description = reader["Description"].ToString(),
-                        VenueID = (int)reader["VenueID"]
+                        VenueID = (int)reader["VenueID"],
+                        AvailabilityStatus = status
                     });
                 }
             }
@@ -111,18 +157,9 @@ namespace SmartEventSystem.Controllers
             return View("SearchResult", events);
         }
 
-        public IActionResult SearchAfterLogin(string searchTerm)
+        public IActionResult Privacy()
         {
-            return PerformSearch(searchTerm);
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel
-            {
-                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
-            });
+            return View();
         }
     }
 }

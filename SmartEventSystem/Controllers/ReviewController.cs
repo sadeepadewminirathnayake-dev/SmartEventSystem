@@ -103,6 +103,8 @@ namespace SmartEventSystem.Controllers
             ViewBag.EventID = eventId;
 
             return View(reviews);
+
+
         }
     }
 }
