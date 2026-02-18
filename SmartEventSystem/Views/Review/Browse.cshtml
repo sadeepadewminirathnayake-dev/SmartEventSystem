@@ -1,38 +1,72 @@
 ﻿@model List<SmartEventSystem.Models.Review>
 
-<h2>Event Reviews</h2>
+<div class="container mt-5">
 
-@if (Model.Count == 0)
-{
-    <p>No reviews available for this event.</p>
-}
-else
-{
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Rating</th>
-                <th>Comment</th>
-                <th>Date</th>
-            </tr>
-        </thead>
-        <tbody>
+    <h2 class="text-center fw-bold text-primary mb-4">
+        ⭐ Event Reviews
+    </h2>
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="alert alert-info text-center shadow-sm">
+            No reviews available for this event.
+        </div>
+    }
+    else
+    {
+        <div class="row">
+
             @foreach (var review in Model)
             {
-                <tr>
-                    <td>@review.Rating ⭐</td>
-                    <td>@review.Comment</td>
-                    <td>@review.ReviewDate.ToShortDateString()</td>
-                </tr>
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow border-0 rounded-4 review-display-card h-100">
+
+                        <div class="card-body">
+
+                            <h5 class="fw-bold text-warning">
+                                @for (int i = 0; i < review.Rating; i++)
+                                {
+                                    @:⭐
+                                }
+                            </h5>
+
+                            <p class="text-muted">
+                                @review.Comment
+                            </p>
+
+                            <small class="text-secondary">
+                                Reviewed on @review.ReviewDate.ToShortDateString()
+                            </small>
+
+                        </div>
+
+                    </div>
+                </div>
             }
 
-            <a asp-controller="Inquiry"
-               asp-action="Create"
-               asp-route-eventId="@ViewBag.EventID"
-               class="btn btn-warning">
-                Send Inquiry
-            </a>
-        </tbody>
-    </table>
-}
+        </div>
+    }
+
+    <div class="text-center mt-4">
+        <a asp-controller="Inquiry"
+           asp-action="Create"
+           asp-route-eventId="@ViewBag.EventID"
+           class="btn btn-warning btn-lg">
+            📩 Send Inquiry
+        </a>
+    </div>
+
+</div>
+
+<style>
+    .review-display-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .review-display-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+        }
+</style>
+
 
