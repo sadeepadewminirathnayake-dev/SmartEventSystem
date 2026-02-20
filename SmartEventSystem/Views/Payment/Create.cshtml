@@ -1,0 +1,25 @@
+﻿@model SmartEventSystem.Models.Payment
+
+<h3>Complete Payment</h3>
+
+<form asp-action="Create" method="post">
+    <input type="hidden" asp-for="BookingID" value="@ViewBag.BookingID" />
+
+    <div class="mb-3">
+        <label>Payment Method</label>
+        <select asp-for="PaymentMethod" class="form-control">
+            <option>Credit Card</option>
+            <option>Debit Card</option>
+            <option>Online Banking</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label>Amount</label>
+        <input asp-for="Amount" class="form-control" required />
+    </div>
+
+    <button type="submit" class="btn btn-success">
+        Pay Now
+    </button>
+</form>
