@@ -10,10 +10,10 @@
                 🎟 Book Your Ticket
             </h2>
 
-            @if (TempData["BookingSuccess"] != null)
+            @if (TempData["PaymentSuccess"] != null)
             {
-                <div class="alert alert-success text-center">
-                    @TempData["BookingSuccess"]
+                <div class="alert alert-success">
+                    @TempData["PaymentSuccess"]
                 </div>
             }
 
