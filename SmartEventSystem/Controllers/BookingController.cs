@@ -20,7 +20,6 @@ namespace SmartEventSystem.Controllers
             // Check login
             if (HttpContext.Session.GetString("UserEmail") == null)
             {
-                // Save event ID for redirect after login
                 HttpContext.Session.SetInt32("PendingBookingEventId", eventId);
                 return RedirectToAction("Login", "Account");
             }
@@ -89,7 +88,9 @@ namespace SmartEventSystem.Controllers
 
                 decimal totalAmount = ticketPrice * model.Quantity;
 
+                // =============================
                 // Insert Booking
+                // =============================
                 string bookingQuery = @"INSERT INTO Booking
                                         (MemberID, EventID, BookingDate, TotalAmount)
                                         OUTPUT INSERTED.BookingID
@@ -103,7 +104,9 @@ namespace SmartEventSystem.Controllers
 
                 int bookingId = (int)bookingCmd.ExecuteScalar();
 
+                // =============================
                 // Insert Ticket
+                // =============================
                 string ticketQuery = @"INSERT INTO Ticket
                                        (BookingID, SeatType, Quantity, Price)
                                        VALUES (@BookingID, @SeatType, @Quantity, @Price)";
@@ -115,10 +118,17 @@ namespace SmartEventSystem.Controllers
                 ticketCmd.Parameters.AddWithValue("@Price", ticketPrice);
 
                 ticketCmd.ExecuteNonQuery();
-            }
 
-            TempData["BookingSuccess"] = "Event booked successfully!";
-            return RedirectToAction("Create", new { eventId = model.EventID });
+                // =============================
+                // Redirect To Payment Page
+                // =============================
+                return RedirectToAction("Create", "Payment",
+                    new
+                    {
+                        bookingId = bookingId,
+                        amount = totalAmount
+                    });
+            }
         }
     }
 }
