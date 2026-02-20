@@ -65,7 +65,7 @@ namespace SmartEventSystem.Controllers
 
                 cmd.ExecuteNonQuery();
             }
-
+            TempData["ReviewSuccess"] = "Review submitted successfully!";
             return RedirectToAction("Details", "Event", new { id = model.EventID });
         }
 
