@@ -50,6 +50,6 @@ public class PaymentController : Controller
 
         TempData["PaymentSuccess"] = "Payment completed successfully!";
 
-        return RedirectToAction("MyBookings", "Booking");
+        return RedirectToAction("Create", "Payment");
     }
 }

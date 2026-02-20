@@ -1,25 +1,45 @@
 ﻿@model SmartEventSystem.Models.Payment
 
-<h3>Complete Payment</h3>
+<div class="container mt-5">
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-success text-white">
+            <h3 class="mb-0">
+                <i class="bi bi-credit-card"></i> Complete Payment
+            </h3>
+        </div>
+        <div class="card-body">
+            <form asp-action="Create" method="post">
+                <input type="hidden" asp-for="BookingID" value="@ViewBag.BookingID" />
 
-<form asp-action="Create" method="post">
-    <input type="hidden" asp-for="BookingID" value="@ViewBag.BookingID" />
+                <!-- Payment Method -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">
+                        <i class="bi bi-wallet2"></i> Payment Method
+                    </label>
+                    <select asp-for="PaymentMethod" class="form-select">
+                        <option>Credit Card</option>
+                        <option>Debit Card</option>
+                        <option>Online Banking</option>
+                        <option>Cash</option>
+                    </select>
+                </div>
 
-    <div class="mb-3">
-        <label>Payment Method</label>
-        <select asp-for="PaymentMethod" class="form-control">
-            <option>Credit Card</option>
-            <option>Debit Card</option>
-            <option>Online Banking</option>
-        </select>
+                <!-- Amount -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">
+                        <i class="bi bi-cash-stack"></i> Amount
+                    </label>
+                    <input asp-for="Amount" class="form-control" placeholder="Enter amount" required />
+                </div>
+
+                <!-- Submit Button -->
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-success btn-lg">
+                        <i class="bi bi-check-circle"></i> Pay Now
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
+</div>
 
-    <div class="mb-3">
-        <label>Amount</label>
-        <input asp-for="Amount" class="form-control" required />
-    </div>
-
-    <button type="submit" class="btn btn-success">
-        Pay Now
-    </button>
-</form>
