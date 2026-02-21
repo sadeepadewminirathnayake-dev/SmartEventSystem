@@ -12,6 +12,9 @@ namespace SmartEventSystem.Models
         public string Message { get; set; }
 
         public DateTime InquiryDate { get; set; }
+
+        public string? Reply { get; set; }
+        public string Status { get; set; }
     }
 }
 

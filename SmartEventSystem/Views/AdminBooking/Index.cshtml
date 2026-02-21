@@ -1,0 +1,94 @@
+﻿@model IEnumerable<dynamic>
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Booking Management</h2>
+
+    <table class="table table-bordered table-striped shadow">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Member</th>
+                <th>Event</th>
+                <th>Total</th>
+                <th>Booking Status</th>
+                <th>Payment Status</th>
+                <th>Refund Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.BookingID</td>
+                    <td>@item.FullName</td>
+                    <td>@item.EventName</td>
+                    <td>LKR @item.TotalAmount</td>
+                    <td>
+                        @{
+                            var bookingStatus = item.BookingStatus == null ? "" : item.BookingStatus.ToString();
+                        }
+                        @if (bookingStatus == "Approved")
+                        {
+                            <span class="badge bg-success">Approved</span>
+                        }
+                        else if (bookingStatus == "Cancelled")
+                        {
+                            <span class="badge bg-danger">Cancelled</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Pending</span>
+                        }
+                    </td>
+                    <td>
+                        @{
+                            var paymentStatus = item.PaymentStatus == null ? "" : item.PaymentStatus.ToString();
+                        }
+                        @if (paymentStatus == "Paid")
+                        {
+                            <span class="badge bg-success">Paid</span>
+                        }
+                        else if (paymentStatus == "Failed")
+                        {
+                            <span class="badge bg-danger">Failed</span>
+                        }
+                        else if (paymentStatus == "Refunded")
+                        {
+                            <span class="badge bg-warning text-dark">Refunded</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Pending</span>
+                        }
+                    </td>
+                    <td>
+                        @{
+                            var refundStatus = item.RefundStatus == null ? "" : item.RefundStatus.ToString();
+                        }
+                        @if (refundStatus == "Refunded")
+                        {
+                            <span class="badge bg-warning text-dark">Refunded</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Not Refunded</span>
+                        }
+                    </td>
+                    <td>
+                        <a asp-action="Approve" asp-route-id="@item.BookingID"
+                           class="btn btn-success btn-sm">Approve</a>
+
+                        <a asp-action="Cancel" asp-route-id="@item.BookingID"
+                           class="btn btn-danger btn-sm">Cancel</a>
+
+                        <a asp-action="Refund" asp-route-id="@item.BookingID"
+                           class="btn btn-warning btn-sm">Refund</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+

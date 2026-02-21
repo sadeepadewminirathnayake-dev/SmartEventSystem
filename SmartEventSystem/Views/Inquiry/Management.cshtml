@@ -1,0 +1,36 @@
+﻿@model List<SmartEventSystem.Models.Inquiry>
+
+<div class="container mt-5">
+    <h3 class="text-primary mb-4">Inquiry Management</h3>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Guest</th>
+                <th>Email</th>
+                <th>Message</th>
+                <th>Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var inquiry in Model)
+            {
+                <tr>
+                    <td>@inquiry.GuestName</td>
+                    <td>@inquiry.Email</td>
+                    <td>@inquiry.Message</td>
+                    <td>@inquiry.InquiryDate.ToShortDateString()</td>
+                    <td>
+                        <a asp-action="Reply"
+                           asp-route-id="@inquiry.InquiryID"
+                           class="btn btn-sm btn-primary">
+                            Reply
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

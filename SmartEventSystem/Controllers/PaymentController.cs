@@ -48,8 +48,29 @@ public class PaymentController : Controller
             cmd.ExecuteNonQuery();
         }
 
+
         TempData["PaymentSuccess"] = "Payment completed successfully!";
 
         return RedirectToAction("Create", "Payment");
+
+
     }
+    [HttpPost]
+    public IActionResult Message (Payment payment)
+    {
+        if (ModelState.IsValid)
+        {
+            // Save payment to database or process logic here
+
+            TempData["SuccessMessage"] = "✅ Payment successfully made!";
+            return RedirectToAction("Success");
+        }
+        return View(payment);
+    }
+
+    public IActionResult Success()
+    {
+        return View();
+    }
+
 }

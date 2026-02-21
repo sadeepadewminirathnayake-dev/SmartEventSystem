@@ -126,6 +126,8 @@ namespace SmartEventSystem.Controllers
 
             }
 
+
+
             return View();
         }
 
@@ -138,7 +140,11 @@ namespace SmartEventSystem.Controllers
             HttpContext.Session.Clear();
             return RedirectToAction("Index", "Home");
         }
+
+
     }
+
+
 }
 
 

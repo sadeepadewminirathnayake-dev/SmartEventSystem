@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using SmartEventSystem.Data;
 using SmartEventSystem.Models;
 
 namespace SmartEventSystem.Controllers
@@ -127,10 +128,87 @@ namespace SmartEventSystem.Controllers
                     {
                         bookingId = bookingId,
                         amount = totalAmount
+
                     });
+
+
+
             }
         }
+
+            // =============================
+            // VIEW MY BOOKINGS
+            // =============================
+public IActionResult MyBookings()
+        {
+            if (HttpContext.Session.GetString("UserEmail") == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            List<dynamic> bookings = new List<dynamic>();
+
+            string connectionString =
+                _configuration.GetConnectionString("SmartEventDBConnection");
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                con.Open();
+
+                // Get MemberID
+                string getMemberQuery =
+                    "SELECT MemberID FROM Member WHERE Email=@Email";
+
+                SqlCommand memberCmd =
+                    new SqlCommand(getMemberQuery, con);
+
+                memberCmd.Parameters.AddWithValue(
+                    "@Email",
+                    HttpContext.Session.GetString("UserEmail"));
+
+                int memberId = (int)memberCmd.ExecuteScalar();
+
+                // Get Booking Details
+                string query = @"
+            SELECT b.BookingID,
+                   e.EventName,
+                   b.BookingDate,
+                   b.TotalAmount,
+                   t.SeatType,
+                   t.Quantity
+            FROM Booking b
+            INNER JOIN Event e ON b.EventID = e.EventID
+            INNER JOIN Ticket t ON b.BookingID = t.BookingID
+            WHERE b.MemberID = @MemberID
+            ORDER BY b.BookingDate DESC";
+
+                SqlCommand cmd = new SqlCommand(query, con);
+                cmd.Parameters.AddWithValue("@MemberID", memberId);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    bookings.Add(new
+                    {
+                        BookingID = reader["BookingID"],
+                        EventName = reader["EventName"],
+                        BookingDate = reader["BookingDate"],
+                        TotalAmount = reader["TotalAmount"],
+                        SeatType = reader["SeatType"],
+                        Quantity = reader["Quantity"]
+                    });
+                }
+            }
+
+            return View(bookings);
+        }
+
+
     }
+
+      
+    
 }
 
 

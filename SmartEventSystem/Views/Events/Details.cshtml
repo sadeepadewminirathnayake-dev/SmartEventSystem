@@ -1,48 +1,109 @@
 ﻿@model SmartEventSystem.Models.Event
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Event Details";
 }
 
-<h1>Details</h1>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 
-<div>
-    <h4>Event</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EventName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EventName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EventDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EventDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EventTime)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EventTime)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-    </dl>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-action="Index">Events</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">@Model.EventName</li>
+                </ol>
+            </nav>
+
+            <div class="card border-0 shadow-lg overflow-hidden">
+                <div class="row g-0">
+
+                    <div class="col-md-5 bg-primary text-white p-5 d-flex flex-column justify-content-center align-items-center text-center">
+                        <div class="mb-4">
+                            <i class="fas fa-calendar-check fa-5x opacity-50"></i>
+                        </div>
+                        <h2 class="fw-bold mb-3">@Model.EventName</h2>
+                        <div class="badge bg-light text-primary fs-6 mb-3 px-3 py-2">
+                            @Model.EventDate.ToString("MMMM dd, yyyy")
+                        </div>
+                        <h3 class="fw-light">@Model.EventTime.ToString(@"hh\:mm")</h3>
+                        <div class="mt-4 pt-4 border-top w-100">
+                            <p class="small text-uppercase tracking-wider mb-1 opacity-75">Admission Price</p>
+                            <h2 class="fw-bold">@Model.Price.ToString("C")</h2>
+                        </div>
+                    </div>
+
+                    <div class="col-md-7 bg-white p-5">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h4 class="text-secondary fw-bold mb-0">Event Information</h4>
+                            <span class="badge rounded-pill @(Model.AvailabilityStatus == "Active" ? "bg-success" : "bg-warning text-dark") px-3">
+                                @Model.AvailabilityStatus
+                            </span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="text-muted small fw-bold text-uppercase">Description</label>
+                            <p class="lead text-dark">
+                                @(string.IsNullOrEmpty(Model.Description) ? "No description provided for this event." : Model.Description)
+                            </p>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <div class="row text-center g-3">
+                            <div class="col-6">
+                                <div class="p-3 border rounded bg-light">
+                                    <i class="fas fa-layer-group text-primary mb-2"></i>
+                                    <p class="small text-muted mb-0">Category ID</p>
+                                    <h6 class="fw-bold mb-0">@Model.CategoryID</h6>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="p-3 border rounded bg-light">
+                                    <i class="fas fa-map-marker-alt text-danger mb-2"></i>
+                                    <p class="small text-muted mb-0">Venue ID</p>
+                                    <h6 class="fw-bold mb-0">@Model.VenueID</h6>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-5 d-flex gap-2">
+                            <a asp-action="Edit" asp-route-id="@Model.EventID" class="btn btn-primary px-4 shadow-sm">
+                                <i class="fas fa-edit me-2"></i>Edit Event
+                            </a>
+                            <a asp-action="Index" class="btn btn-outline-secondary px-4">
+                                <i class="fas fa-list me-2"></i>Back to List
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.EventID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+<style>
+    .card {
+        border-radius: 20px;
+    }
+
+    .tracking-wider {
+        letter-spacing: 1px;
+    }
+
+    .bg-primary {
+        background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%) !important;
+    }
+
+    .breadcrumb-item a {
+        text-decoration: none;
+        color: #6c757d;
+    }
+
+        .breadcrumb-item a:hover {
+            color: #0d6efd;
+        }
+</style>

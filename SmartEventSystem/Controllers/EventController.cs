@@ -138,6 +138,14 @@ namespace SmartEventSystem.Controllers
 
             return View(selectedEvent);
         }
+
+        
+
+            
+        
+
+
     }
 }
+
 

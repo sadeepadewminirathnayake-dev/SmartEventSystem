@@ -15,7 +15,9 @@ namespace SmartEventSystem.Data
         }
 
         public DbSet<SmartEventSystem.Models.Event> Event { get; set; } = default!;
+        public DbSet<SmartEventSystem.Models.Booking> Booking { get; set; } = default!;
+        public DbSet<Review> Review { get; set; }
+    
 
-        
-    }
+}
 }

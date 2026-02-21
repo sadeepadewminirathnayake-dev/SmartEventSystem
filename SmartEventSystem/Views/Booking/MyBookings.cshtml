@@ -1,0 +1,44 @@
+﻿@model IEnumerable<dynamic>
+
+@{
+    ViewData["Title"] = "Bookings Details";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Booking Details</h2>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info text-center">
+            You have not booked any events yet.
+        </div>
+    }
+    else
+    {
+        <table class="table table-bordered table-striped shadow">
+            <thead class="table-dark">
+                <tr>
+                    <th>Booking ID</th>
+                    <th>Event</th>
+                    <th>Seat Type</th>
+                    <th>Quantity</th>
+                    <th>Total Amount</th>
+                    <th>Booking Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.BookingID</td>
+                        <td>@item.EventName</td>
+                        <td>@item.SeatType</td>
+                        <td>@item.Quantity</td>
+                        <td>LKR @item.TotalAmount</td>
+                        <td>@Convert.ToDateTime(item.BookingDate).ToString("yyyy-MM-dd")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

@@ -1,0 +1,56 @@
+﻿@model SmartEventSystem.Models.Event
+
+@{
+    ViewData["Title"] = "Create Event";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg p-4 rounded-4">
+        <h3 class="text-center mb-4 text-primary">Create New Event</h3>
+
+        @if (TempData["EventSuccess"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["EventSuccess"]
+            </div>
+        }
+
+        <form asp-action="Create" method="post">
+
+            <div class="mb-3">
+                <label class="form-label">Event Name</label>
+                <input asp-for="EventName" class="form-control" required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Event Date</label>
+                <input asp-for="EventDate" type="date" class="form-control" required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Event Time</label>
+                <input asp-for="EventTime" type="time" class="form-control" required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Ticket Price</label>
+                <input asp-for="Price" type="number" class="form-control" required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Description</label>
+                <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Venue ID</label>
+                <input asp-for="VenueID" type="number" class="form-control" required />
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">
+                Create Event
+            </button>
+
+        </form>
+    </div>
+</div>

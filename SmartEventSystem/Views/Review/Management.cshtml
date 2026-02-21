@@ -1,0 +1,43 @@
+﻿@model List<SmartEventSystem.Models.Review>
+
+<div class="container mt-5">
+    <h3 class="text-primary mb-4">Review Management</h3>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Event ID</th>
+                <th>Member ID</th>
+                <th>Rating</th>
+                <th>Comment</th>
+                <th>Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var review in Model)
+            {
+                <tr>
+                    <td>@review.EventID</td>
+                    <td>@review.MemberID</td>
+                    <td>
+                        @for (int i = 1; i <= review.Rating; i++)
+                        {
+                            <span>⭐</span>
+                        }
+                    </td>
+                    <td>@review.Comment</td>
+                    <td>@review.ReviewDate.ToShortDateString()</td>
+                    <td>
+                        <a asp-action="Delete"
+                           asp-route-id="@review.ReviewID"
+                           class="btn btn-sm btn-danger">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

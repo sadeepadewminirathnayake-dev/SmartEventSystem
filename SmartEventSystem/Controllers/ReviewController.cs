@@ -106,5 +106,67 @@ namespace SmartEventSystem.Controllers
 
 
         }
+
+        public IActionResult Management()
+        {
+            List<Review> reviews = new List<Review>();
+
+            string connectionString = _configuration.GetConnectionString("SmartEventDBConnection");
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string query = @"SELECT ReviewID, MemberID, EventID, Rating, Comment, ReviewDate
+                         FROM Review
+                         ORDER BY ReviewDate DESC";
+
+                SqlCommand cmd = new SqlCommand(query, con);
+
+                con.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    reviews.Add(new Review
+                    {
+                        ReviewID = Convert.ToInt32(reader["ReviewID"]),
+                        MemberID = Convert.ToInt32(reader["MemberID"]),
+                        EventID = Convert.ToInt32(reader["EventID"]),
+                        Rating = Convert.ToInt32(reader["Rating"]),
+                        Comment = reader["Comment"].ToString(),
+                        ReviewDate = Convert.ToDateTime(reader["ReviewDate"])
+                    });
+                }
+            }
+
+            return View(reviews);
+        }
+
+        public IActionResult Delete(int id)
+        {
+            string connectionString = _configuration.GetConnectionString("SmartEventDBConnection");
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string query = "DELETE FROM Review WHERE ReviewID = @ReviewID";
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@ReviewID", id);
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
+            return RedirectToAction("Management");
+        }
+
+
+
+
+
+
+
+
+
     }
 }
